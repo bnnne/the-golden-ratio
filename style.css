@@ -18,13 +18,6 @@ body {
     color: #333;
 }
 
-.digit-display {
-    font-size: 72px;
-    margin: 20px 0;
-    font-family: monospace;
-    color: #2c3e50;
-}
-
 #digit-input {
     width: 60px;
     height: 60px;
