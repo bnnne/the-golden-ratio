@@ -19,14 +19,21 @@ function handleInput(e) {
     const inputDigit = e.target.value;
     const correctDigit = phiDigits[currentIndex];
     
+    // Clear input immediately
+    e.target.value = '';
+    
     if (inputDigit === correctDigit) {
         score++;
         currentIndex++;
         updateScore();
         resetTimer();
-        document.getElementById('digit-input').value = '';
+        
+        // If we've reached the end of available digits
+        if (currentIndex >= phiDigits.length) {
+            gameOver(true); // Pass true for victory
+        }
     } else if (inputDigit !== '') {
-        gameOver();
+        gameOver(false); // Pass false for loss
     }
 }
 
@@ -44,7 +51,7 @@ function updateTimer() {
     const currentWidth = parseFloat(timer.style.width) || 100;
     
     if (currentWidth <= 0) {
-        gameOver();
+        gameOver(false);
         return;
     }
     
@@ -55,11 +62,17 @@ function updateScore() {
     document.getElementById('score').textContent = score;
 }
 
-function gameOver() {
+function gameOver(isVictory) {
     clearInterval(timerInterval);
     document.getElementById('digit-input').disabled = true;
+    
     setTimeout(() => {
-        alert(`Game Over! Final Score: ${score}`);
+        if (isVictory) {
+            alert(`Congratulations! You completed all ${phiDigits.length} digits with perfect score!`);
+        } else {
+            alert(`Game Over! Final Score: ${score}`);
+        }
+        
         document.getElementById('digit-input').disabled = false;
         startGame();
     }, 10);
