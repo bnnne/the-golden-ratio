@@ -10,15 +10,9 @@ function startGame() {
     currentIndex = 0;
     score = 0;
     updateScore();
-    showNextDigit();
-    startTimer();
-}
-
-function showNextDigit() {
-    document.getElementById('current-digit').textContent = 
-        phiDigits[currentIndex] || "0"; // Fallback to 0 if we exceed our digits
     document.getElementById('digit-input').value = '';
     document.getElementById('digit-input').focus();
+    startTimer();
 }
 
 function handleInput(e) {
@@ -30,7 +24,7 @@ function handleInput(e) {
         currentIndex++;
         updateScore();
         resetTimer();
-        showNextDigit();
+        document.getElementById('digit-input').value = '';
     } else if (inputDigit !== '') {
         gameOver();
     }
