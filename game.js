@@ -1,75 +1,79 @@
-const digitsContainer = document.getElementById("digits");
+const digitsDiv = document.getElementById("digits");
 const input = document.getElementById("input");
-const correctDisplay = document.getElementById("correct");
+const scoreValue = document.getElementById("scoreValue");
 
-let currentIndex = 0;
+let score = 0;
 
-function drawDigits(){
+function render() {
 
-    digitsContainer.innerHTML = "";
+    digitsDiv.innerHTML = "";
 
-    for(let line = 0; line < 10; line++){
+    for (let row = 0; row < 10; row++) {
 
-        const lineDiv = document.createElement("div");
-        lineDiv.className = "line";
+        const rowDiv = document.createElement("div");
+        rowDiv.className = "row";
 
-        for(let group = 0; group < 5; group++){
+        for (let col = 0; col < 10; col++) {
 
-            const groupDiv = document.createElement("span");
-            groupDiv.className = "group";
+            const index = row * 10 + col;
 
-            for(let pair = 0; pair < 2; pair++){
+            const cell = document.createElement("div");
+            cell.className = "cell";
 
-                const index = line*10 + group*2 + pair;
-
-                const span = document.createElement("span");
-                span.className = "digit";
-                span.textContent = phi[index];
-
-                if(index < currentIndex){
-                    span.classList.add("correct");
-                }
-
-                if(index === currentIndex){
-                    span.classList.add("current");
-                }
-
-                groupDiv.appendChild(span);
-
+            if (index === score) {
+                cell.classList.add("current");
             }
 
-            lineDiv.appendChild(groupDiv);
+            const number = document.createElement("div");
+            number.className = "number";
 
+            if (index < score) {
+                number.textContent = PHI[index];
+            } else {
+                number.textContent = "";
+            }
+
+            const underline = document.createElement("div");
+            underline.className = "underline";
+
+            if (index === score) {
+                underline.textContent = "_";
+            }
+
+            cell.appendChild(number);
+            cell.appendChild(underline);
+
+            rowDiv.appendChild(cell);
         }
 
-        digitsContainer.appendChild(lineDiv);
-
+        digitsDiv.appendChild(rowDiv);
     }
 
+    scoreValue.textContent = score;
 }
 
-drawDigits();
-
-input.focus();
+render();
 
 input.addEventListener("input", () => {
 
     const value = input.value;
 
-    currentIndex = value.length;
+    if (value.length === 0)
+        return;
 
-    let score = 0;
+    if (value === PHI[score]) {
 
-    for(let i = 0; i < value.length; i++){
+        score++;
 
-        if(value[i] === phi[i]){
-            score++;
+        render();
+
+        if (score === PHI.length) {
+
+            alert("Congratulations! You memorized all 100 digits!");
+
+            input.disabled = true;
         }
-
     }
 
-    correctDisplay.textContent = score;
-
-    drawDigits();
-
+    input.value = "";
 });
