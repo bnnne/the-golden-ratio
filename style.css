@@ -10,35 +10,54 @@ body {
 
 .container {
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
 }
 
-.score {
-    font-size: 24px;
-    margin-bottom: 20px;
-    color: #333;
+.digit-display {
+    font-size: 36px;
+    font-family: monospace;
+    color: #2c3e50;
+    min-height: 50px;
+    word-spacing: 10px;
+    letter-spacing: 2px;
+    padding: 20px;
+}
+
+.digit-group {
+    display: inline;
+    margin-right: 15px;
 }
 
 #digit-input {
-    width: 60px;
-    height: 60px;
-    font-size: 40px;
+    width: 80px;
+    height: 80px;
+    font-size: 48px;
     text-align: center;
-    border: 2px solid #3498db;
-    border-radius: 8px;
-    margin: 20px 0;
+    border: 3px solid #3498db;
+    border-radius: 12px;
     caret-color: transparent;
+    background-color: white;
 }
 
 #digit-input:focus {
     outline: none;
     border-color: #2980b9;
+    box-shadow: 0 0 15px rgba(52, 152, 219, 0.3);
+}
+
+.score {
+    font-size: 28px;
+    color: #333;
+    font-weight: bold;
 }
 
 .timer-bar {
     width: 200px;
     height: 10px;
     background-color: #eee;
-    margin: 20px auto;
     border-radius: 5px;
 }
 
