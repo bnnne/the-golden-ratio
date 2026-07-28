@@ -1,0 +1,85 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f0f0f0;
+}
+
+.container {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.digit-display {
+    font-family: 'Courier New', monospace;
+    font-size: 36px;
+    min-height: 60px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    max-width: 600px;
+    line-height: 1.8;
+    color: #2c3e50;
+}
+
+.input-wrapper {
+    margin: 10px 0;
+}
+
+#digit-input {
+    width: 80px;
+    height: 80px;
+    font-size: 48px;
+    text-align: center;
+    border: 3px solid #3498db;
+    border-radius: 12px;
+    caret-color: transparent;
+    background-color: white;
+}
+
+#digit-input:focus {
+    outline: none;
+    border-color: #2980b9;
+    box-shadow: 0 0 20px rgba(52, 152, 219, 0.6);
+}
+
+.score {
+    font-size: 24px;
+    color: #333;
+    font-weight: bold;
+}
+
+.timer-bar {
+    width: 250px;
+    height: 12px;
+    background-color: #ddd;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+#timer-progress {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, #e74c3c, #f39c12, #2ecc71);
+    border-radius: 6px;
+    transition: width 0.03s linear;
+}
