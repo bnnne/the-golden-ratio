@@ -2,6 +2,7 @@ let currentIndex = 0;
 let score = 0;
 let timerInterval;
 let enteredDigits = [];
+let gameActive = true;
 
 // Initialize game
 document.getElementById('digit-input').addEventListener('input', handleInput);
@@ -11,11 +12,13 @@ function startGame() {
     currentIndex = 0;
     score = 0;
     enteredDigits = [];
+    gameActive = true;
     updateScore();
     updateDisplay();
-    showNextDigit();
-    startTimer();
+    document.getElementById('digit-input').value = '';
     document.getElementById('digit-input').disabled = false;
+    document.getElementById('digit-input').focus();
+    startTimer();
 }
 
 function showNextDigit() {
@@ -28,16 +31,8 @@ function updateDisplay() {
     const display = document.getElementById('digit-display');
     display.innerHTML = '';
     
-    // Group digits in tens
-    for (let i = 0; i <= currentIndex; i++) {
-        if (i > 0 && i % 10 === 0) {
-            // Add a small gap between groups of 10
-            const breakElement = document.createElement('span');
-            breakElement.style.width = '100%';
-            breakElement.style.height = '5px';
-            display.appendChild(breakElement);
-        }
-        
+    // Show all entered digits and the current position
+    for (let i = 0; i <= currentIndex + 10; i++) { // Show a few positions ahead
         const digitSpan = document.createElement('span');
         
         if (i < enteredDigits.length) {
@@ -48,20 +43,19 @@ function updateDisplay() {
             } else {
                 digitSpan.className = 'wrong-digit';
             }
-        } else if (i === currentIndex) {
-            // Current digit to guess (show as question mark or highlight)
-            digitSpan.textContent = '?';
+        } else if (i === currentIndex && gameActive) {
+            // Current digit to guess
+            digitSpan.textContent = '_';
             digitSpan.className = 'current-digit';
-        } else {
-            // Future digits (don't show)
+        } else if (i < phiDigits.length && i < currentIndex + 10) {
+            // Show a hint of upcoming positions
             digitSpan.textContent = '·';
-            digitSpan.className = 'future-digit';
             digitSpan.style.color = '#bdc3c7';
         }
         
-        // Add spacing between groups
+        // Add spacing between groups of 10
         if (i > 0 && i % 10 === 0) {
-            digitSpan.style.marginLeft = '10px';
+            digitSpan.style.marginLeft = '15px';
         }
         
         display.appendChild(digitSpan);
@@ -69,18 +63,38 @@ function updateDisplay() {
 }
 
 function handleInput(e) {
+    if (!gameActive) return;
+    
     const inputDigit = e.target.value;
+    
+    // Only process single digits
+    if (inputDigit.length !== 1 || !/[0-9]/.test(inputDigit)) {
+        e.target.value = '';
+        return;
+    }
+    
     const correctDigit = phiDigits[currentIndex];
     
     if (inputDigit === correctDigit) {
+        // Correct digit
         enteredDigits.push(inputDigit);
         score++;
         currentIndex++;
         updateScore();
         resetTimer();
         updateDisplay();
-        showNextDigit();
-    } else if (inputDigit !== '') {
+        
+        // Clear input for next digit
+        setTimeout(() => {
+            e.target.value = '';
+        }, 50);
+        
+        // Check if we've reached the end of our digits
+        if (currentIndex >= phiDigits.length) {
+            gameWin();
+        }
+    } else {
+        // Wrong digit
         enteredDigits.push(inputDigit);
         updateDisplay();
         gameOver();
@@ -88,6 +102,7 @@ function handleInput(e) {
 }
 
 function startTimer() {
+    clearInterval(timerInterval);
     resetTimer();
     timerInterval = setInterval(updateTimer, 30);
 }
@@ -97,6 +112,8 @@ function resetTimer() {
 }
 
 function updateTimer() {
+    if (!gameActive) return;
+    
     const timer = document.getElementById('timer-progress');
     const currentWidth = parseFloat(timer.style.width) || 100;
     
@@ -113,17 +130,37 @@ function updateScore() {
 }
 
 function gameOver() {
+    gameActive = false;
     clearInterval(timerInterval);
     document.getElementById('digit-input').disabled = true;
+    
     setTimeout(() => {
         alert(`Game Over! Final Score: ${score}\nYou memorized ${score} digits of the golden ratio!`);
         startGame();
-    }, 10);
+    }, 100);
 }
 
-// Prevent losing focus from input
+function gameWin() {
+    gameActive = false;
+    clearInterval(timerInterval);
+    document.getElementById('digit-input').disabled = true;
+    
+    setTimeout(() => {
+        alert(`Congratulations! You've memorized all ${score} digits of the golden ratio!\nYou're a true math genius! 🎉`);
+        startGame();
+    }, 100);
+}
+
+// Keep focus on input field
 document.addEventListener('click', function(e) {
-    if (!document.getElementById('digit-input').disabled) {
+    if (gameActive && !document.getElementById('digit-input').disabled) {
+        document.getElementById('digit-input').focus();
+    }
+});
+
+// Handle keyboard input even when input loses focus briefly
+document.addEventListener('keydown', function(e) {
+    if (gameActive && !document.getElementById('digit-input').disabled) {
         document.getElementById('digit-input').focus();
     }
 });
