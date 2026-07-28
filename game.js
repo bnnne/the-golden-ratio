@@ -21,18 +21,12 @@ function startGame() {
     startTimer();
 }
 
-function showNextDigit() {
-    document.getElementById('digit-input').value = '';
-    document.getElementById('digit-input').focus();
-    updateDisplay();
-}
-
 function updateDisplay() {
     const display = document.getElementById('digit-display');
     display.innerHTML = '';
     
-    // Show all entered digits and the current position
-    for (let i = 0; i <= currentIndex + 10; i++) { // Show a few positions ahead
+    // Show all entered digits up to current position
+    for (let i = 0; i <= currentIndex; i++) {
         const digitSpan = document.createElement('span');
         
         if (i < enteredDigits.length) {
@@ -44,13 +38,9 @@ function updateDisplay() {
                 digitSpan.className = 'wrong-digit';
             }
         } else if (i === currentIndex && gameActive) {
-            // Current digit to guess
+            // Current position - show underscore
             digitSpan.textContent = '_';
             digitSpan.className = 'current-digit';
-        } else if (i < phiDigits.length && i < currentIndex + 10) {
-            // Show a hint of upcoming positions
-            digitSpan.textContent = '·';
-            digitSpan.style.color = '#bdc3c7';
         }
         
         // Add spacing between groups of 10
@@ -158,7 +148,7 @@ document.addEventListener('click', function(e) {
     }
 });
 
-// Handle keyboard input even when input loses focus briefly
+// Handle keyboard input
 document.addEventListener('keydown', function(e) {
     if (gameActive && !document.getElementById('digit-input').disabled) {
         document.getElementById('digit-input').focus();
