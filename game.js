@@ -13,9 +13,15 @@ function startGame() {
     enteredDigits = [];
     updateScore();
     updateDisplay();
-    document.getElementById('digit-input').disabled = false;
-    document.getElementById('digit-input').focus();
+    showNextDigit();
     startTimer();
+    document.getElementById('digit-input').disabled = false;
+}
+
+function showNextDigit() {
+    document.getElementById('digit-input').value = '';
+    document.getElementById('digit-input').focus();
+    updateDisplay();
 }
 
 function updateDisplay() {
@@ -23,16 +29,42 @@ function updateDisplay() {
     display.innerHTML = '';
     
     // Group digits in tens
-    for (let i = 0; i < enteredDigits.length; i++) {
+    for (let i = 0; i <= currentIndex; i++) {
         if (i > 0 && i % 10 === 0) {
-            display.innerHTML += '<br>';
+            // Add a small gap between groups of 10
+            const breakElement = document.createElement('span');
+            breakElement.style.width = '100%';
+            breakElement.style.height = '5px';
+            display.appendChild(breakElement);
         }
-        display.innerHTML += `<span class="digit-group">${enteredDigits[i]}</span>`;
-    }
-    
-    // Add blinking cursor for next position
-    if (currentIndex < phiDigits.length) {
-        display.innerHTML += '<span class="digit-group" style="opacity: 0.5; animation: blink 1s infinite;">_</span>';
+        
+        const digitSpan = document.createElement('span');
+        
+        if (i < enteredDigits.length) {
+            // Already entered digits
+            digitSpan.textContent = enteredDigits[i];
+            if (enteredDigits[i] === phiDigits[i]) {
+                digitSpan.className = 'correct-digit';
+            } else {
+                digitSpan.className = 'wrong-digit';
+            }
+        } else if (i === currentIndex) {
+            // Current digit to guess (show as question mark or highlight)
+            digitSpan.textContent = '?';
+            digitSpan.className = 'current-digit';
+        } else {
+            // Future digits (don't show)
+            digitSpan.textContent = '·';
+            digitSpan.className = 'future-digit';
+            digitSpan.style.color = '#bdc3c7';
+        }
+        
+        // Add spacing between groups
+        if (i > 0 && i % 10 === 0) {
+            digitSpan.style.marginLeft = '10px';
+        }
+        
+        display.appendChild(digitSpan);
     }
 }
 
@@ -41,14 +73,16 @@ function handleInput(e) {
     const correctDigit = phiDigits[currentIndex];
     
     if (inputDigit === correctDigit) {
-        score++;
         enteredDigits.push(inputDigit);
+        score++;
         currentIndex++;
         updateScore();
-        updateDisplay();
         resetTimer();
-        document.getElementById('digit-input').value = '';
+        updateDisplay();
+        showNextDigit();
     } else if (inputDigit !== '') {
+        enteredDigits.push(inputDigit);
+        updateDisplay();
         gameOver();
     }
 }
@@ -82,17 +116,14 @@ function gameOver() {
     clearInterval(timerInterval);
     document.getElementById('digit-input').disabled = true;
     setTimeout(() => {
-        alert(`Game Over! Final Score: ${score}\nDigits entered: ${enteredDigits.join('')}`);
+        alert(`Game Over! Final Score: ${score}\nYou memorized ${score} digits of the golden ratio!`);
         startGame();
     }, 10);
 }
 
-// Add CSS animation for cursor blink
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes blink {
-        0%, 100% { opacity: 0.5; }
-        50% { opacity: 0; }
+// Prevent losing focus from input
+document.addEventListener('click', function(e) {
+    if (!document.getElementById('digit-input').disabled) {
+        document.getElementById('digit-input').focus();
     }
-`;
-document.head.appendChild(style);
+});
