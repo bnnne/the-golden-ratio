@@ -1,6 +1,7 @@
 let currentIndex = 0;
 let score = 0;
 let timerInterval;
+let enteredDigits = [];
 
 // Initialize game
 document.getElementById('digit-input').addEventListener('input', handleInput);
@@ -9,31 +10,46 @@ startGame();
 function startGame() {
     currentIndex = 0;
     score = 0;
+    enteredDigits = [];
     updateScore();
-    document.getElementById('digit-input').value = '';
+    updateDisplay();
+    document.getElementById('digit-input').disabled = false;
     document.getElementById('digit-input').focus();
     startTimer();
+}
+
+function updateDisplay() {
+    const display = document.getElementById('digit-display');
+    display.innerHTML = '';
+    
+    // Group digits in tens
+    for (let i = 0; i < enteredDigits.length; i++) {
+        if (i > 0 && i % 10 === 0) {
+            display.innerHTML += '<br>';
+        }
+        display.innerHTML += `<span class="digit-group">${enteredDigits[i]}</span>`;
+    }
+    
+    // Add blinking cursor for next position
+    if (currentIndex < phiDigits.length) {
+        display.innerHTML += '<span class="digit-group" style="opacity: 0.5; animation: blink 1s infinite;">_</span>';
+    }
 }
 
 function handleInput(e) {
     const inputDigit = e.target.value;
     const correctDigit = phiDigits[currentIndex];
     
-    // Clear input immediately
-    e.target.value = '';
-    
     if (inputDigit === correctDigit) {
         score++;
+        enteredDigits.push(inputDigit);
         currentIndex++;
         updateScore();
+        updateDisplay();
         resetTimer();
-        
-        // If we've reached the end of available digits
-        if (currentIndex >= phiDigits.length) {
-            gameOver(true); // Pass true for victory
-        }
+        document.getElementById('digit-input').value = '';
     } else if (inputDigit !== '') {
-        gameOver(false); // Pass false for loss
+        gameOver();
     }
 }
 
@@ -51,7 +67,7 @@ function updateTimer() {
     const currentWidth = parseFloat(timer.style.width) || 100;
     
     if (currentWidth <= 0) {
-        gameOver(false);
+        gameOver();
         return;
     }
     
@@ -62,18 +78,21 @@ function updateScore() {
     document.getElementById('score').textContent = score;
 }
 
-function gameOver(isVictory) {
+function gameOver() {
     clearInterval(timerInterval);
     document.getElementById('digit-input').disabled = true;
-    
     setTimeout(() => {
-        if (isVictory) {
-            alert(`Congratulations! You completed all ${phiDigits.length} digits with perfect score!`);
-        } else {
-            alert(`Game Over! Final Score: ${score}`);
-        }
-        
-        document.getElementById('digit-input').disabled = false;
+        alert(`Game Over! Final Score: ${score}\nDigits entered: ${enteredDigits.join('')}`);
         startGame();
     }, 10);
 }
+
+// Add CSS animation for cursor blink
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes blink {
+        0%, 100% { opacity: 0.5; }
+        50% { opacity: 0; }
+    }
+`;
+document.head.appendChild(style);
