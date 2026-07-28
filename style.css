@@ -1,85 +1,80 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
 }
 
-html, body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
+body{
+    background:#111;
+    color:white;
+    font-family:Consolas, monospace;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
 }
 
-body {
-    font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background-color: #f0f0f0;
+#game{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:25px;
 }
 
-.container {
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
+#digits{
+    font-size:30px;
+    line-height:1.8;
+    letter-spacing:2px;
+    text-align:center;
 }
 
-.digit-display {
-    font-family: 'Courier New', monospace;
-    font-size: 36px;
-    min-height: 60px;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    max-width: 600px;
-    line-height: 1.8;
-    color: #2c3e50;
+.line{
+    margin-bottom:10px;
 }
 
-.input-wrapper {
-    margin: 10px 0;
+.group{
+    display:inline-block;
+    margin-right:18px;
 }
 
-#digit-input {
-    width: 80px;
-    height: 80px;
-    font-size: 48px;
-    text-align: center;
-    border: 3px solid #3498db;
-    border-radius: 12px;
-    caret-color: transparent;
-    background-color: white;
+.digit{
+    display:inline-block;
+    width:22px;
+    text-align:center;
+    position:relative;
 }
 
-#digit-input:focus {
-    outline: none;
-    border-color: #2980b9;
-    box-shadow: 0 0 20px rgba(52, 152, 219, 0.6);
+.current{
+    color:#ffd700;
 }
 
-.score {
-    font-size: 24px;
-    color: #333;
-    font-weight: bold;
+.current::after{
+    content:"_";
+    position:absolute;
+    left:50%;
+    transform:translateX(-50%);
+    bottom:-18px;
+    color:#ffd700;
 }
 
-.timer-bar {
-    width: 250px;
-    height: 12px;
-    background-color: #ddd;
-    border-radius: 6px;
-    overflow: hidden;
+.correct{
+    color:#65ff65;
 }
 
-#timer-progress {
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, #e74c3c, #f39c12, #2ecc71);
-    border-radius: 6px;
-    transition: width 0.03s linear;
+.wrong{
+    color:#ff5555;
+}
+
+input{
+    width:260px;
+    font-size:30px;
+    text-align:center;
+    padding:10px;
+    border:none;
+    outline:none;
+    border-radius:8px;
+}
+
+#score{
+    font-size:26px;
 }
