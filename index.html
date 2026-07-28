@@ -9,7 +9,9 @@
 <body>
     <div class="container">
         <div class="digit-display" id="digit-display"></div>
-        <input type="text" id="digit-input" inputmode="numeric" pattern="[0-9]" maxlength="1" autofocus>
+        <div class="input-wrapper">
+            <input type="text" id="digit-input" maxlength="1" inputmode="numeric" pattern="[0-9]" autofocus>
+        </div>
         <div class="score">Score: <span id="score">0</span></div>
         <div class="timer-bar">
             <div id="timer-progress"></div>
