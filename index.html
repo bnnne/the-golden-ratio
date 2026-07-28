@@ -4,20 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Golden Ratio Memory Game</title>
+
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <div class="digit-display" id="digit-display"></div>
-        <div class="input-wrapper">
-            <input type="text" id="digit-input" maxlength="1" inputmode="numeric" pattern="[0-9]" autofocus>
-        </div>
-        <div class="score">Score: <span id="score">0</span></div>
-        <div class="timer-bar">
-            <div id="timer-progress"></div>
-        </div>
+
+<div id="game">
+
+    <div id="digits"></div>
+
+    <input
+        id="input"
+        type="text"
+        autocomplete="off"
+        spellcheck="false"
+        maxlength="100"
+    >
+
+    <div id="score">
+        Score: <span id="correct">0</span>/100
     </div>
-    <script src="phi.js"></script>
-    <script src="game.js"></script>
+
+</div>
+
+<script src="phi.js"></script>
+<script src="game.js"></script>
+
 </body>
 </html>
